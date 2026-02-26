@@ -9,7 +9,7 @@ from google.genai import types
 load_dotenv()
 
 # Grab the key from the vault (or from Streamlit Cloud's secrets)
-GEMINI_API_KEY = os.getenv("AIzaSyBTQ3ea5Vl0_65_taNO8_h_HTl9W4ZEoUA")
+GEMINI_API_KEY = os.getenv(GEMINI_API_KEY)
 
 # --- 2. CONNECT TO GEMINI ---
 client = genai.Client(api_key=GEMINI_API_KEY)
