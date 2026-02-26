@@ -1,14 +1,24 @@
 import streamlit as st
+import os
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-# --- 1. CONNECT TO GEMINI ---
+# 1. Open the local vault
+load_dotenv()
+
+# 2. Grab the key from inside the vault
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# 3. Connect to Gemini
+client = genai.Client(api_key=GEMINI_API_KEY)
+
 # Replace with your actual Gemini API key from Google AI Studio
 GEMINI_API_KEY = "AIzaSyBTQ3ea5Vl0_65_taNO8_h_HTl9W4ZEoUA" 
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-# --- 2. BUILD THE UI ---
+# --- . BUILD THE UI ---
 st.title("🧠 Gemini-Powered Fact Checker")
 st.write("Paste a news headline or full article below. Gemini will analyze the context, check for clickbait, and give a verdict!")
 
@@ -19,7 +29,7 @@ if st.button("Analyze with Gemini"):
         st.info("Gemini is analyzing the context... 🕵️‍♂️")
         
         try:
-            # --- 3. THE "PROMPT ENGINEERING" ---
+            # --- . THE "PROMPT ENGINEERING" ---
             # We program Gemini's persona here
             system_instructions = """
             You are an elite fact-checker and journalist. 
@@ -33,7 +43,7 @@ if st.button("Analyze with Gemini"):
             # Combine instructions and user text 
             prompt = f"{system_instructions}\n\nHere is the news text:\n{user_text}"
             
-            # --- 4. CALL THE API ---
+            # --- . CALL THE API ---
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
                 contents=prompt,
@@ -41,7 +51,7 @@ if st.button("Analyze with Gemini"):
                 config=types.GenerateContentConfig(temperature=0.3) 
             )
             
-            # --- 5. DISPLAY THE RESULT ---
+            # --- . DISPLAY THE RESULT ---
             st.success("Analysis Complete!")
             st.write(response.text)
             
